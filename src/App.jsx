@@ -12,6 +12,7 @@ function App() {
       <div className="min-h-screen flex flex-col">
         <Header />
         <Routes>
+        <Route path="*" element={<NotFound />} />
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
