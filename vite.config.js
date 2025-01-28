@@ -9,6 +9,7 @@ export default defineConfig({
     outDir: 'dist',
   },
   plugins: [react(),tailwindcss()],
+  base: './',
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

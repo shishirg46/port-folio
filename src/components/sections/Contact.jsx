@@ -4,7 +4,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import emailjs from 'emailjs-com'; // Import emailjs
+import emailjs from '@emailjs/browser';
+ // Import emailjs
 
 const Contact = () => {
   const styles = `
