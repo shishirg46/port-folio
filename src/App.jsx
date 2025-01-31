@@ -2,8 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/layout/Header.jsx'; // Ensure "layout" matches the folder name.
 import Footer from './components/layout/Footer.jsx'; // Ensure case matches.
 import Home from './components/pages/Home.jsx'; // Ensure "pages" and file names are correct.
-import About from './components/pages/AboutPage.jsx';
-import Contact from './components/pages/ContactPage.jsx';
+import AboutPage from './components/pages/AboutPage.jsx';
+import Contact from './components/sections/Contact.jsx';
 import Projects from './components/sections/Projects.jsx';
 
 
@@ -14,11 +14,10 @@ function App() {
         <Header />
         <Routes>
         <Route path="*" element={<div>Page Not Found</div>} />
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
+          <Route index path="/" element={<Home />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/projects" element={<Projects/>} />
-
         </Routes>
         <Footer />
       </div>
