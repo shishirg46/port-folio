@@ -9,9 +9,9 @@ import Projects from './components/sections/Projects.jsx';
 
 function App() {
   return (
-    <Router>
-      <div className="min-h-screen flex flex-col">
-        <Header />
+    <div className="min-h-screen flex flex-col">
+        <Router>
+      <Header />
         <Routes>
         <Route path="*" element={<div>Page Not Found</div>} />
           <Route index path="/" element={<Home />} />
@@ -20,8 +20,8 @@ function App() {
           <Route path="/projects" element={<Projects/>} />
         </Routes>
         <Footer />
+        </Router>
       </div>
-    </Router>
   );
 }
 
