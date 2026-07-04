@@ -1,0 +1,27 @@
+{
+  "name": "Shishir Ghimire",
+  "title": "Full Stack Developer",
+  "subtitle": "",
+  "badge": "Available for web development projects",
+  "subheading": "Building useful web products with clean, modern interfaces.",
+  "description": "I'm Shishir Ghimire, a full-stack developer focused on responsive apps, practical user flows, and the frontend details that make a product feel easy to use.",
+  "stats": [
+    {
+      "value": "2+",
+      "label": "Featured projects"
+    },
+    {
+      "value": "MERN",
+      "label": "Core stack"
+    },
+    {
+      "value": "2024",
+      "label": "Active since"
+    }
+  ],
+  "techStack": [
+    "MERN, PERN"
+  ],
+  "profileImage": "/port-image.jpeg",
+  "resumeUrl": "/Shishir%20Ghimire.pdf"
+}

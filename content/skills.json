@@ -1,0 +1,40 @@
+{
+  "description": "A practical stack for building full stack applications from first screen to database.",
+  "categories": [
+    {
+      "category": "Frontend",
+      "description": "Interfaces, interactions, and responsive layouts.",
+      "items": [
+        "React",
+        "Next.js",
+        "JavaScript",
+        "TypeScript",
+        "Tailwind CSS",
+        "HTML/CSS"
+      ]
+    },
+    {
+      "category": "Backend",
+      "description": "APIs, server logic, and database-backed features.",
+      "items": [
+        "Node.js",
+        "Express",
+        "MongoDB",
+        "REST APIs",
+        "Authentication"
+      ]
+    },
+    {
+      "category": "Workflow",
+      "description": "Tools and practices for getting products shipped.",
+      "items": [
+        "Git",
+        "Reusable UI",
+        "Debugging",
+        "Deployment",
+        "Form Handling",
+        "Responsive QA"
+      ]
+    }
+  ]
+}

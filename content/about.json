@@ -1,0 +1,27 @@
+{
+  "heading": "I turn ideas into responsive web experiences.",
+  "paragraphs": [
+    "Full-stack web developer with experience designing and building complete applications, from backend architecture to frontend interfaces. Focused on performance, usability, and clean, maintainable code."
+  ],
+  "highlights": [
+    {
+      "title": "Clean builds",
+      "text": "Readable React components, practical state, and APIs that stay easy to maintain."
+    },
+    {
+      "title": "Full stack flow",
+      "text": "Comfortable moving from UI polish to Express routes and MongoDB data models."
+    },
+    {
+      "title": "Product mindset",
+      "text": "Focused on shipping interfaces that solve real problems, not just look finished."
+    }
+  ],
+  "experience": [
+    {
+      "role": "Web Developer",
+      "description": "Building MERN stack applications with attention to responsive layouts, reusable components, database-backed features, and practical deployment.",
+      "period": "2024 - Present"
+    }
+  ]
+}

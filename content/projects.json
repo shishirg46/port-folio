@@ -1,0 +1,38 @@
+{
+  "description": "A few examples of how I approach interfaces, product flow, and full stack features.",
+  "projects": [
+    {
+      "title": "YatraAI Travel Safety",
+      "description": "A polished travel safety landing experience for Nepal with AI-assisted route confidence, destination context, and a high-contrast product interface.",
+      "tech": [
+        "Next.js",
+        "Tailwind CSS",
+        "UI Design"
+      ],
+      "image": "/landing.png",
+      "featured": true
+    },
+    {
+      "title": "Disaster Notifier and Relief",
+      "description": "A MERN stack application concept for real-time disaster alerts, emergency updates, and relief coordination.",
+      "tech": [
+        "React",
+        "Node.js",
+        "MongoDB",
+        "Express"
+      ],
+      "image": "/disaster-notifier-landing.svg",
+      "featured": true
+    },
+    {
+      "title": "School Website",
+      "description": "A responsive school website focused on clear information architecture, quick scanning, and simple content updates.",
+      "tech": [
+        "React",
+        "Tailwind CSS"
+      ],
+      "image": "/school-website-landing.svg",
+      "featured": true
+    }
+  ]
+}
