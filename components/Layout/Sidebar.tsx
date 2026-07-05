@@ -102,7 +102,7 @@ const Sidebar = () => {
       <aside className="hidden md:flex fixed left-0 top-0 h-screen w-72 flex-col justify-between border-r border-border bg-background/85 p-8 backdrop-blur">
         <div>
           <a href="/" className="block">
-            <Image src="/web-title-icon.png" alt="Shishir Ghimire" width={160} height={160} className="object-contain" priority />
+            <Image src="/web-title-icon.png" alt="Shishir Ghimire" width={64} height={64} className="object-contain" priority />
           </a>
           <nav className="mt-10 space-y-1">{sections.map(navLink)}</nav>
           <a
