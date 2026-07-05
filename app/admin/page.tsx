@@ -65,25 +65,31 @@
     const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0]
       if (!file) return
+      console.log('[ImageUpload] file selected:', file.name)
       setError('')
       setUploading(true)
       try {
         const token = localStorage.getItem('admin_token')
         const formData = new FormData()
         formData.append('file', file)
+        console.log('[ImageUpload] uploading...')
         const res = await fetch('/api/upload', {
           method: 'POST',
           headers: { Authorization: `Bearer ${token}` },
           body: formData,
         })
+        console.log('[ImageUpload] upload response:', res.status)
         if (!res.ok) {
           const err = await res.json()
+          console.log('[ImageUpload] upload error:', err)
           setError(err.error || 'Upload failed')
           return
         }
         const { url } = await res.json()
+        console.log('[ImageUpload] upload success, url:', url)
         onChange(url)
-      } catch {
+      } catch (e) {
+        console.log('[ImageUpload] upload exception:', e)
         setError('Network error. Check your connection.')
       } finally {
         setUploading(false)
