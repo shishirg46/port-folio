@@ -35,7 +35,7 @@ const Hero = () => {
               {d.badge}
             </div>
           )}
-          <h1 className="mt-6 max-w-3xl text-5xl font-bold tracking-tight text-foreground md:text-7xl">
+          <h1 className="mt-6 max-w-3xl text-3xl font-bold tracking-tight text-foreground md:text-5xl">
             {d.subheading}
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
