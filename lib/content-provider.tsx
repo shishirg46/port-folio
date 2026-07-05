@@ -93,7 +93,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
                 }`}
                 style={shimmerStyle}
               >
-                Shishir
+                SHISHIR
               </span>
               <span
                 className={`text-4xl font-bold tracking-tight lg:text-5xl bg-clip-text text-transparent ${
@@ -101,7 +101,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
                 }`}
                 style={shimmerStyle}
               >
-                Ghimire
+                GHIMIRE
               </span>
             </div>
           )}
