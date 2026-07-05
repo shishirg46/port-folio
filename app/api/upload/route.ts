@@ -31,15 +31,20 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'File too large. Maximum 5MB.' }, { status: 413 })
   }
 
-  const ext = file.name.split('.').pop()?.toLowerCase() || 'png'
-  const base = file.name.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9-]/g, '_').slice(0, 40)
-  const filename = `${Date.now()}-${base}.${ext}`
+  try {
+    const ext = file.name.split('.').pop()?.toLowerCase() || 'png'
+    const base = file.name.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9-]/g, '_').slice(0, 40)
+    const filename = `${Date.now()}-${base}.${ext}`
 
-  const buffer = Buffer.from(await file.arrayBuffer())
-  const blob = await put(filename, buffer, {
-    access: 'public',
-    contentType: file.type,
-  })
+    const buffer = Buffer.from(await file.arrayBuffer())
+    const blob = await put(filename, buffer, {
+      access: 'public',
+      contentType: file.type,
+    })
 
-  return NextResponse.json({ url: blob.url })
+    return NextResponse.json({ url: blob.url })
+  } catch (err) {
+    console.error('Upload error:', err)
+    return NextResponse.json({ error: 'Upload failed. Check BLOB_READ_WRITE_TOKEN and server logs.' }, { status: 500 })
+  }
 }
