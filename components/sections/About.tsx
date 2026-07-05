@@ -33,7 +33,7 @@ const About = () => {
       <div className="max-w-6xl">
         <div className="max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-widest text-primary">About</p>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-balance text-foreground md:text-5xl">
+          <h2 className="mt-4 text-2xl sm:text-3xl font-bold tracking-tight text-balance text-foreground md:text-5xl">
             {d.heading}
           </h2>
           {(d.paragraphs || []).map((p: string, i: number) => (

@@ -54,7 +54,7 @@ const Contact = () => {
       <div className="grid max-w-6xl gap-10 lg:grid-cols-[0.85fr_1fr]">
         <div>
           <p className="text-sm font-semibold uppercase tracking-widest text-primary">Contact</p>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-balance text-foreground md:text-5xl">
+          <h2 className="mt-4 text-2xl sm:text-3xl font-bold tracking-tight text-balance text-foreground md:text-5xl">
             Let&apos;s build something useful.
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-pretty text-muted-foreground">{cd.description}</p>

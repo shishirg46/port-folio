@@ -43,7 +43,7 @@ const Projects = () => {
       <div className="max-w-6xl">
         <div className="max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-widest text-primary">Projects</p>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground md:text-5xl">
+          <h2 className="mt-4 text-2xl sm:text-3xl font-bold tracking-tight text-foreground md:text-5xl">
             Selected work
           </h2>
           <p className="mt-4 max-w-md text-sm leading-6 text-pretty text-muted-foreground">{d.description}</p>
