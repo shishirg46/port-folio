@@ -102,8 +102,8 @@ const Sidebar = () => {
       <aside className="hidden md:flex fixed left-0 top-0 h-screen w-72 flex-col justify-between border-r border-border bg-background/85 p-8 backdrop-blur">
         <div>
           <div className="space-y-4">
-            <a href="/" className="block h-20 w-20 overflow-hidden rounded-lg border border-border bg-muted shadow-sm">
-              <Image src="/web-title-icon.png" alt="Shishir Ghimire" width={96} height={96} className="h-full w-full object-cover" priority />
+            <a href="/" className="block h-20 w-20">
+              <Image src="/web-title-icon.png" alt="Shishir Ghimire" width={96} height={96} className="h-full w-full object-contain" priority />
             </a>
             <div>
               <a href="/" className="text-xl font-bold tracking-tight text-foreground">{h.name}</a>
