@@ -39,7 +39,15 @@ const Hero = () => {
             {d.subheading}
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
-            {d.description}
+            {(() => {
+              const parts = d.description.split(d.name)
+              return parts.map((part, i) => (
+                <span key={i}>
+                  {part}
+                  {i < parts.length - 1 && <span className="font-semibold text-primary">{d.name}</span>}
+                </span>
+              ))
+            })()}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Button
