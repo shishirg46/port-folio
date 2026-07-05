@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { get, put } from '@vercel/blob'
+import { head, put } from '@vercel/blob'
 import { promises as fs } from 'fs'
 import path from 'path'
 import { verifyToken } from '@/lib/auth'
@@ -19,11 +19,10 @@ export async function GET(
     return NextResponse.json({ error: 'Invalid section' }, { status: 400 })
   }
   try {
-    const blob = await get(`content/${section}.json`, {
-      access: 'public',
+    const blob = await head(`content/${section}.json`, {
       token: process.env.BLOB_READ_WRITE_TOKEN,
     })
-    if (blob) {
+    if (blob && blob.url) {
       const res = await fetch(blob.url)
       if (res.ok) return NextResponse.json(await res.json())
     }
