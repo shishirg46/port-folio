@@ -40,11 +40,13 @@ export async function POST(req: Request) {
     const blob = await put(filename, buffer, {
       access: 'public',
       contentType: file.type,
+      token: process.env.BLOB_READ_WRITE_TOKEN,
     })
 
     return NextResponse.json({ url: blob.url })
   } catch (err) {
-    console.error('Upload error:', err)
-    return NextResponse.json({ error: 'Upload failed. Check BLOB_READ_WRITE_TOKEN and server logs.' }, { status: 500 })
+    const message = err instanceof Error ? err.message : String(err)
+    console.error('Upload error:', message)
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }
