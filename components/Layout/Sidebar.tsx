@@ -101,9 +101,15 @@ const Sidebar = () => {
     <>
       <aside className="hidden md:flex fixed left-0 top-0 h-screen w-72 flex-col justify-between border-r border-border bg-background/85 p-8 backdrop-blur">
         <div>
-          <a href="/" className="block w-16 h-16 overflow-hidden rounded-lg border border-border bg-muted shadow-sm">
-            <Image src="/web-title-icon.png" alt="Shishir Ghimire" width={64} height={64} className="h-full w-full object-cover" priority />
-          </a>
+          <div className="space-y-4">
+            <a href="/" className="block h-20 w-20 overflow-hidden rounded-lg border border-border bg-muted shadow-sm">
+              <Image src="/web-title-icon.png" alt="Shishir Ghimire" width={96} height={96} className="h-full w-full object-cover" priority />
+            </a>
+            <div>
+              <a href="/" className="text-xl font-bold tracking-tight text-foreground">{h.name}</a>
+              <p className="mt-1 text-sm text-muted-foreground">{h.title}</p>
+            </div>
+          </div>
           <nav className="mt-10 space-y-1">{sections.map(navLink)}</nav>
           <a
             href={h.resumeUrl || '/Shishir%20Ghimire.pdf'}
