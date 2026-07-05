@@ -14,6 +14,14 @@ const sections = [
   { id: 'contact', label: 'Contact' },
 ]
 
+const adminTabs = [
+  { id: 'hero', label: 'Hero', href: '/admin?tab=hero' },
+  { id: 'about', label: 'About', href: '/admin?tab=about' },
+  { id: 'skills', label: 'Skills', href: '/admin?tab=skills' },
+  { id: 'projects', label: 'Projects', href: '/admin?tab=projects' },
+  { id: 'contact', label: 'Contact', href: '/admin?tab=contact' },
+]
+
 const defaultHero = {
   name: 'Shishir Ghimire',
   title: 'Full Stack Developer',
@@ -34,6 +42,7 @@ const Sidebar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const pathname = usePathname()
   const isHome = pathname === '/'
+  const isAdmin = pathname.startsWith('/admin')
 
   const { data: heroData } = useContent('hero', defaultHero)
   const { data: contactData } = useContent('contact', defaultContact)
@@ -147,18 +156,32 @@ const Sidebar = () => {
         </div>
         {isMenuOpen && (
           <div className="border-t border-border px-5 py-4 space-y-1 bg-background/95 shadow-lg">
-            <nav className="space-y-1">{sections.map(navLink)}</nav>
-            <hr className="my-3 border-border" />
-            <a href={h.resumeUrl || '/Shishir%20Ghimire.pdf'} download className="flex items-center gap-2 py-2 text-sm text-muted-foreground hover:text-foreground">
-              <Download className="h-4 w-4" />
-              Resume
-            </a>
-            {socialLinks.map((link) => (
-              <a key={link.label} href={link.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 py-2 text-sm text-muted-foreground hover:text-foreground">
-                {link.label === 'GitHub' ? <Github className="h-4 w-4" /> : <Linkedin className="h-4 w-4" />}
-                {link.label}
-              </a>
-            ))}
+            {isAdmin ? (
+              <>
+                <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider px-3 py-1.5">Admin</div>
+                {adminTabs.map(t => (
+                  <a key={t.id} href={t.href} onClick={() => setIsMenuOpen(false)} className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+                    <span className="h-1.5 w-1.5 rounded-full bg-border" />
+                    {t.label}
+                  </a>
+                ))}
+              </>
+            ) : (
+              <>
+                <nav className="space-y-1">{sections.map(navLink)}</nav>
+                <hr className="my-3 border-border" />
+                <a href={h.resumeUrl || '/Shishir%20Ghimire.pdf'} download className="flex items-center gap-2 py-2 text-sm text-muted-foreground hover:text-foreground">
+                  <Download className="h-4 w-4" />
+                  Resume
+                </a>
+                {socialLinks.map((link) => (
+                  <a key={link.label} href={link.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 py-2 text-sm text-muted-foreground hover:text-foreground">
+                    {link.label === 'GitHub' ? <Github className="h-4 w-4" /> : <Linkedin className="h-4 w-4" />}
+                    {link.label}
+                  </a>
+                ))}
+              </>
+            )}
           </div>
         )}
       </header>
