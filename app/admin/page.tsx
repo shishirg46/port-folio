@@ -97,6 +97,7 @@
       }
     }
 
+    console.log('[ImageUpload] render, value:', value)
     return (
       <div>
         <label className="mb-1.5 block text-xs font-medium text-muted-foreground uppercase tracking-wider">{label}</label>
@@ -150,7 +151,10 @@
   }
 
   function HeroForm({ data, onChange }: { data: any; onChange: (d: any) => void }) {
-    const set = (field: string, value: any) => onChange({ ...data, [field]: value })
+    const set = (field: string, value: any) => {
+      console.log('[HeroForm] set called:', field, value, 'data.profileImage before:', data.profileImage)
+      onChange({ ...data, [field]: value })
+    }
     return (
       <div className="space-y-6">
         <div className="rounded-xl border border-border bg-card p-4 sm:p-5">
@@ -502,7 +506,7 @@
                 <Loader2 className="h-6 w-6 animate-spin" />
                 <p className="mt-3 text-sm">Loading {tab} content...</p>
               </div>
-            ) : tab === 'hero' ? <HeroForm data={data.hero || {}} onChange={d => setData(prev => ({ ...prev, hero: d }))} />
+            ) : tab === 'hero' ? <HeroForm data={data.hero || {}} onChange={d => { console.log('[AdminPage] hero onChange:', d.profileImage); setData(prev => ({ ...prev, hero: d })) }} />
               : tab === 'about' ? <AboutForm data={data.about || {}} onChange={d => setData(prev => ({ ...prev, about: d }))} />
               : tab === 'skills' ? <SkillsForm data={data.skills || {}} onChange={d => setData(prev => ({ ...prev, skills: d }))} />
               : tab === 'projects' ? <ProjectsForm data={data.projects || {}} onChange={d => setData(prev => ({ ...prev, projects: d }))} />
