@@ -53,6 +53,7 @@ export async function PUT(
       access: 'public',
       contentType: 'application/json',
       addRandomSuffix: false,
+      allowOverwrite: true,
       token: process.env.BLOB_READ_WRITE_TOKEN,
     })
     return NextResponse.json({ ok: true })
