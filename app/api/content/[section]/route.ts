@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server'
+import { get, put } from '@vercel/blob'
 import { promises as fs } from 'fs'
 import path from 'path'
 import { verifyToken } from '@/lib/auth'
 
 const ALLOWED = ['hero', 'about', 'skills', 'projects', 'contact'] as const
 
-function getPath(section: string): string {
+function getLocalPath(section: string): string {
   return path.join(process.cwd(), 'content', `${section}.json`)
 }
 
@@ -18,7 +19,17 @@ export async function GET(
     return NextResponse.json({ error: 'Invalid section' }, { status: 400 })
   }
   try {
-    const file = await fs.readFile(getPath(section), 'utf-8')
+    const blob = await get(`content/${section}.json`, {
+      access: 'public',
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    })
+    if (blob) {
+      const res = await fetch(blob.url)
+      if (res.ok) return NextResponse.json(await res.json())
+    }
+  } catch {}
+  try {
+    const file = await fs.readFile(getLocalPath(section), 'utf-8')
     return NextResponse.json(JSON.parse(file))
   } catch {
     return NextResponse.json({})
@@ -38,6 +49,10 @@ export async function PUT(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
   const body = await req.json()
-  await fs.writeFile(getPath(section), JSON.stringify(body, null, 2), 'utf-8')
+  await put(`content/${section}.json`, JSON.stringify(body, null, 2), {
+    access: 'public',
+    contentType: 'application/json',
+    token: process.env.BLOB_READ_WRITE_TOKEN,
+  })
   return NextResponse.json({ ok: true })
 }
