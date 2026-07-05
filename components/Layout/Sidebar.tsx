@@ -101,22 +101,9 @@ const Sidebar = () => {
     <>
       <aside className="hidden md:flex fixed left-0 top-0 h-screen w-72 flex-col justify-between border-r border-border bg-background/85 p-8 backdrop-blur">
         <div>
-          <div className="space-y-4">
-            <a href="/" className="block h-20 w-20 overflow-hidden rounded-lg border border-border bg-muted shadow-sm">
-              <Image
-                src={h.profileImage || '/port-image.jpeg'}
-                alt={h.name || 'Shishir Ghimire'}
-                width={96}
-                height={96}
-                className="h-full w-full object-cover"
-                priority
-              />
-            </a>
-            <div>
-              <a href="/" className="text-xl font-bold tracking-tight text-foreground">{h.name}</a>
-              <p className="mt-1 text-sm text-muted-foreground">{h.title}</p>
-            </div>
-          </div>
+          <a href="/" className="block">
+            <Image src="/web-title-icon.png" alt="Shishir Ghimire" width={160} height={160} className="object-contain" priority />
+          </a>
           <nav className="mt-10 space-y-1">{sections.map(navLink)}</nav>
           <a
             href={h.resumeUrl || '/Shishir%20Ghimire.pdf'}
@@ -145,7 +132,9 @@ const Sidebar = () => {
 
       <header className="md:hidden fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-sm">
         <div className="flex items-center justify-between px-5 h-14">
-          <a href="/" className="text-base font-bold">{h.name || 'SG'}</a>
+          <a href="/" className="block shrink-0">
+            <Image src="/web-title-icon.png" alt="Shishir Ghimire" width={36} height={36} className="object-contain" priority />
+          </a>
           <button
             aria-label="Toggle navigation"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
