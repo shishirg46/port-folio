@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
 import { WifiOff } from 'lucide-react'
 
 type ContentData = Record<string, any>
@@ -18,6 +18,11 @@ const gridStyle = {
     'linear-gradient(hsl(35 70% 90% / 0.32) 1px, transparent 1px)',
   ].join(', '),
   backgroundSize: 'auto, 4rem 4rem, 4rem 4rem',
+} as const
+
+const shimmerStyle = {
+  backgroundImage: 'linear-gradient(90deg, hsl(var(--foreground)), hsl(var(--primary)), hsl(var(--foreground)))',
+  backgroundSize: '200% auto',
 } as const
 
 export function ContentProvider({ children }: { children: ReactNode }) {
@@ -40,12 +45,17 @@ export function ContentProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (offline || loaded) return
+    const start = Date.now()
     fetch('/api/content')
       .then(r => r.json())
       .then(d => {
-        setData(d)
-        setSplit(true)
-        setTimeout(() => setLoaded(true), 800)
+        const elapsed = Date.now() - start
+        const delay = Math.max(0, 1500 - elapsed)
+        setTimeout(() => {
+          setData(d)
+          setSplit(true)
+          setTimeout(() => setLoaded(true), 800)
+        }, delay)
       })
       .catch(() => {})
   }, [offline, loaded])
@@ -78,18 +88,18 @@ export function ContentProvider({ children }: { children: ReactNode }) {
           ) : (
             <div className="flex flex-col items-center gap-2 lg:flex-row lg:gap-6">
               <span
-                className={`text-4xl font-bold tracking-tight lg:text-5xl
-                  [background:linear-gradient(90deg,hsl(var(--foreground)),hsl(var(--primary)),hsl(var(--foreground)))_0_0/200%_auto]
-                  bg-clip-text text-transparent
-                  ${split ? 'split-first' : 'animate-shimmer'}`}
+                className={`text-4xl font-bold tracking-tight lg:text-5xl bg-clip-text text-transparent ${
+                  split ? 'split-first' : 'animate-shimmer'
+                }`}
+                style={shimmerStyle}
               >
                 Shishir
               </span>
               <span
-                className={`text-4xl font-bold tracking-tight lg:text-5xl
-                  [background:linear-gradient(90deg,hsl(var(--foreground)),hsl(var(--primary)),hsl(var(--foreground)))_0_0/200%_auto]
-                  bg-clip-text text-transparent
-                  ${split ? 'split-last' : 'animate-shimmer'}`}
+                className={`text-4xl font-bold tracking-tight lg:text-5xl bg-clip-text text-transparent ${
+                  split ? 'split-last' : 'animate-shimmer'
+                }`}
+                style={shimmerStyle}
               >
                 Ghimire
               </span>
