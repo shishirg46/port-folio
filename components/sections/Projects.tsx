@@ -41,14 +41,12 @@ const Projects = () => {
   return (
     <section id="projects" className="border-t border-border px-6 py-24 md:px-12">
       <div className="max-w-6xl">
-        <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-widest text-primary">Projects</p>
-            <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground md:text-5xl">
-              Selected work
-            </h2>
-          </div>
-          <p className="max-w-md text-sm leading-6 text-muted-foreground">{d.description}</p>
+        <div className="max-w-3xl">
+          <p className="text-sm font-semibold uppercase tracking-widest text-primary">Projects</p>
+          <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground md:text-5xl">
+            Selected work
+          </h2>
+          <p className="mt-4 max-w-md text-sm leading-6 text-muted-foreground">{d.description}</p>
         </div>
 
         <div className="mt-12 grid gap-5">
