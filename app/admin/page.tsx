@@ -59,11 +59,13 @@
 
   function ImageUpload({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
     const [uploading, setUploading] = useState(false)
+    const [error, setError] = useState('')
     const inputRef = useRef<HTMLInputElement>(null)
 
     const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0]
       if (!file) return
+      setError('')
       setUploading(true)
       try {
         const token = localStorage.getItem('admin_token')
@@ -76,13 +78,13 @@
         })
         if (!res.ok) {
           const err = await res.json()
-          alert(err.error || 'Upload failed')
+          setError(err.error || 'Upload failed')
           return
         }
         const { url } = await res.json()
         onChange(url)
       } catch {
-        alert('Upload failed')
+        setError('Network error. Check your connection.')
       } finally {
         setUploading(false)
         if (inputRef.current) inputRef.current.value = ''
@@ -97,12 +99,24 @@
             <img src={value} alt="" className="max-h-40 w-full object-contain bg-muted" />
           </div>
         )}
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
           <button type="button" onClick={() => inputRef.current?.click()} disabled={uploading} className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3.5 py-2.5 text-sm font-medium text-muted-foreground hover:border-primary/40 hover:text-primary transition-colors disabled:opacity-50">
             {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
             {uploading ? 'Uploading...' : 'Add Photo'}
           </button>
+          {uploading && (
+            <span className="text-xs text-muted-foreground animate-pulse">Uploading...</span>
+          )}
         </div>
+        {error && (
+          <div className="mt-1.5 flex items-center gap-1.5 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
+            <X className="h-3 w-3 shrink-0" />
+            <span className="flex-1">{error}</span>
+            <button type="button" onClick={() => setError('')} className="shrink-0 hover:text-red-900 transition-colors">
+              <X className="h-3 w-3" />
+            </button>
+          </div>
+        )}
         <input ref={inputRef} type="file" accept="image/*" onChange={handleFile} className="hidden" />
         <div className="mt-2">
           <input type="text" value={value} onChange={e => onChange(e.target.value)} placeholder="/filename.png" className="w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 transition-colors focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring" />
