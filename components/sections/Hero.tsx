@@ -35,10 +35,10 @@ const Hero = () => {
               {d.badge}
             </div>
           )}
-          <h1 className="mt-6 max-w-3xl text-3xl font-bold tracking-tight text-foreground md:text-5xl">
+          <h1 className="mt-6 max-w-3xl text-3xl font-bold tracking-tight text-balance text-foreground md:text-5xl">
             {d.subheading}
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
+          <p className="mt-6 max-w-prose text-lg leading-relaxed text-pretty text-muted-foreground">
             {(() => {
               const parts = d.description.split(d.name)
               return parts.map((part, i) => (
