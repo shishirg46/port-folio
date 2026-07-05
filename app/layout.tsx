@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { Analytics } from '@vercel/analytics/next'
 import Sidebar from '@/components/Layout/Sidebar'
 import Footer from '@/components/Layout/Footer'
 import { ContentProvider } from '@/lib/content-provider'
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <Footer />
           </div>
         </ContentProvider>
+        <Analytics />
       </body>
     </html>
   )
