@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
-import { promises as fs } from 'fs'
-import path from 'path'
+import { put } from '@vercel/blob'
 import { verifyToken } from '@/lib/auth'
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml']
@@ -35,10 +34,12 @@ export async function POST(req: Request) {
   const ext = file.name.split('.').pop()?.toLowerCase() || 'png'
   const base = file.name.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9-]/g, '_').slice(0, 40)
   const filename = `${Date.now()}-${base}.${ext}`
+
   const buffer = Buffer.from(await file.arrayBuffer())
-  const publicDir = path.join(process.cwd(), 'public')
+  const blob = await put(filename, buffer, {
+    access: 'public',
+    contentType: file.type,
+  })
 
-  await fs.writeFile(path.join(publicDir, filename), buffer)
-
-  return NextResponse.json({ url: `/${filename}` })
+  return NextResponse.json({ url: blob.url })
 }

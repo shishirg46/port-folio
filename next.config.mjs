@@ -2,6 +2,12 @@
 const nextConfig = {
   images: {
     dangerouslyAllowSVG: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*.public.blob.vercel-storage.com',
+      },
+    ],
   },
 }
 
