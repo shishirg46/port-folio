@@ -48,10 +48,17 @@ export async function PUT(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
   const body = await req.json()
-  await put(`content/${section}.json`, JSON.stringify(body, null, 2), {
-    access: 'public',
-    contentType: 'application/json',
-    token: process.env.BLOB_READ_WRITE_TOKEN,
-  })
-  return NextResponse.json({ ok: true })
+  try {
+    await put(`content/${section}.json`, JSON.stringify(body, null, 2), {
+      access: 'public',
+      contentType: 'application/json',
+      addRandomSuffix: false,
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    })
+    return NextResponse.json({ ok: true })
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e)
+    console.error('[content] put error:', msg)
+    return NextResponse.json({ error: msg }, { status: 500 })
+  }
 }
