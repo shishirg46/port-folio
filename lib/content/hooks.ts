@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { useContentData } from './content-provider'
+import { useContentData } from '../content-provider'
 
 export function useContent<T>(section: string, defaultData: T): { data: T; loading: boolean } {
   const allContent = useContentData()

@@ -1,38 +1,20 @@
 import { NextResponse } from 'next/server'
-import { head, put } from '@vercel/blob'
-import { promises as fs } from 'fs'
-import path from 'path'
-import { verifyToken } from '@/lib/auth'
-
-const ALLOWED = ['hero', 'about', 'skills', 'projects', 'contact'] as const
-
-function getLocalPath(section: string): string {
-  return path.join(process.cwd(), 'content', `${section}.json`)
-}
+import { put } from '@vercel/blob'
+import { requireAdmin } from '@/lib/auth'
+import { getSectionContent, errorCode } from '@/lib/content/repository'
+import { saveSection, normalizeSectionPayload } from '@/lib/content/save'
+import { SECTIONS } from '@/lib/content/types'
 
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ section: string }> }
 ) {
   const { section } = await params
-  if (!ALLOWED.includes(section as typeof ALLOWED[number])) {
+  if (!SECTIONS.includes(section as (typeof SECTIONS)[number])) {
     return NextResponse.json({ error: 'Invalid section' }, { status: 400 })
   }
-  try {
-    const blob = await head(`content/${section}.json`, {
-      token: process.env.BLOB_READ_WRITE_TOKEN,
-    })
-    if (blob && blob.url) {
-      const res = await fetch(blob.url)
-      if (res.ok) return NextResponse.json(await res.json())
-    }
-  } catch {}
-  try {
-    const file = await fs.readFile(getLocalPath(section), 'utf-8')
-    return NextResponse.json(JSON.parse(file))
-  } catch {
-    return NextResponse.json({})
-  }
+  const content = await getSectionContent(section as (typeof SECTIONS)[number])
+  return NextResponse.json(content ?? {})
 }
 
 export async function PUT(
@@ -40,26 +22,52 @@ export async function PUT(
   { params }: { params: Promise<{ section: string }> }
 ) {
   const { section } = await params
-  if (!ALLOWED.includes(section as typeof ALLOWED[number])) {
+  if (!SECTIONS.includes(section as (typeof SECTIONS)[number])) {
     return NextResponse.json({ error: 'Invalid section' }, { status: 400 })
   }
-  const auth = req.headers.get('authorization')?.replace('Bearer ', '')
-  if (!auth || !verifyToken(auth)) {
+
+  try {
+    await requireAdmin()
+  } catch {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
-  const body = await req.json()
+
+  let body: unknown
   try {
-    await put(`content/${section}.json`, JSON.stringify(body, null, 2), {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+  }
+
+  let normalized: ReturnType<typeof normalizeSectionPayload>
+  try {
+    normalized = normalizeSectionPayload(section as (typeof SECTIONS)[number], body)
+  } catch {
+    return NextResponse.json({ error: 'Invalid content payload' }, { status: 400 })
+  }
+
+  try {
+    await saveSection(section as (typeof SECTIONS)[number], normalized)
+  } catch (e) {
+    console.warn(`[content] DB write failed for "${section}" (${errorCode(e)}) — content not saved`)
+    return NextResponse.json({ error: 'Database write failed' }, { status: 500 })
+  }
+
+  try {
+    await put(`content/${section}.json`, JSON.stringify(normalized, null, 2), {
       access: 'public',
       contentType: 'application/json',
       addRandomSuffix: false,
       allowOverwrite: true,
       token: process.env.BLOB_READ_WRITE_TOKEN,
     })
-    return NextResponse.json({ ok: true })
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e)
-    console.error('[content] put error:', msg)
-    return NextResponse.json({ error: msg }, { status: 500 })
+  } catch {
+    console.warn(`[content] DB write OK but Blob sync failed for "${section}" — stores out of sync`)
+    return NextResponse.json(
+      { error: 'Saved to database but failed to sync Blob; content may be out of sync' },
+      { status: 500 },
+    )
   }
+
+  return NextResponse.json({ ok: true })
 }
