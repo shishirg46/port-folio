@@ -1,0 +1,174 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ---- HERO / PROFILE (content/hero.json) ----
+model Profile {
+  id           String   @id @default(cuid())
+  name         String
+  title        String
+  subtitle     String?
+  badge        String?
+  subheading   String?
+  description  String?
+  techStack    String[]
+  profileImage String?
+  resumeUrl    String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  stats       Stat[]
+  experiences Experience[]
+}
+
+model Stat {
+  id        String  @id @default(cuid())
+  value     String
+  label     String
+  order     Int     @default(0)
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+}
+
+model Experience {
+  id          String  @id @default(cuid())
+  role        String
+  company     String?
+  period      String
+  description String
+  order       Int     @default(0)
+  profileId   String
+  profile     Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+}
+
+// ---- ABOUT (content/about.json) ----
+model About {
+  id        String   @id @default(cuid())
+  heading   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  paragraphs AboutParagraph[]
+  highlights Highlight[]
+}
+
+model AboutParagraph {
+  id      String @id @default(cuid())
+  content String
+  order   Int    @default(0)
+  aboutId String
+  about   About  @relation(fields: [aboutId], references: [id], onDelete: Cascade)
+
+  @@index([aboutId])
+}
+
+model Highlight {
+  id      String  @id @default(cuid())
+  icon    String?
+  title   String
+  text    String
+  order   Int     @default(0)
+  aboutId String
+  about   About   @relation(fields: [aboutId], references: [id], onDelete: Cascade)
+
+  @@index([aboutId])
+}
+
+// ---- SKILLS (content/skills.json) ----
+model SkillSection {
+  id          String   @id @default(cuid())
+  description String
+  updatedAt   DateTime @updatedAt
+
+  categories SkillCategory[]
+}
+
+model SkillCategory {
+  id          String       @id @default(cuid())
+  category    String
+  description String?
+  order       Int          @default(0)
+  sectionId   String
+  section     SkillSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  skills Skill[]
+
+  @@index([sectionId])
+}
+
+model Skill {
+  id         String        @id @default(cuid())
+  name       String
+  order      Int           @default(0)
+  categoryId String
+  category   SkillCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@index([categoryId])
+}
+
+// ---- PROJECTS (content/projects.json) ----
+model ProjectSection {
+  id          String   @id @default(cuid())
+  description String
+  updatedAt   DateTime @updatedAt
+
+  projects Project[]
+}
+
+model Project {
+  id          String          @id @default(cuid())
+  title       String
+  description String
+  link        String?
+  image       String?
+  featured    Boolean         @default(false)
+  tech        String[]
+  order       Int             @default(0)
+  sectionId   String
+  section     ProjectSection  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([sectionId])
+}
+
+// ---- CONTACT (content/contact.json) ----
+model ContactSettings {
+  id          String   @id @default(cuid())
+  email       String
+  tagline     String?
+  description String?
+  github      String?
+  linkedin    String?
+  twitter     String?
+  updatedAt   DateTime @updatedAt
+}
+
+// ---- UPLOAD AUDIT (Vercel Blob stays the store) ----
+model UploadedImage {
+  id        String   @id @default(cuid())
+  filename  String
+  url       String
+  mimeType  String
+  size      Int
+  createdAt DateTime @default(now())
+}
+
+// ---- AUTH (replaces lib/auth.ts base64 scheme) ----
+model AdminUser {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

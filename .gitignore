@@ -22,3 +22,5 @@ node_modules
 *.sw?
 .vercel
 .env*
+!.env.example
+tsconfig.tsbuildinfo

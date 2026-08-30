@@ -1,13 +1,15 @@
 import { NextResponse } from 'next/server'
 import { put } from '@vercel/blob'
-import { verifyToken } from '@/lib/auth'
+import { requireAdmin } from '@/lib/auth'
+import { errorCode } from '@/lib/content/repository'
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml']
 const MAX_SIZE = 5 * 1024 * 1024
 
 export async function POST(req: Request) {
-  const auth = req.headers.get('authorization')?.replace('Bearer ', '')
-  if (!auth || !verifyToken(auth)) {
+  try {
+    await requireAdmin()
+  } catch {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -45,8 +47,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ url: blob.url })
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err)
-    console.error('Upload error:', message)
-    return NextResponse.json({ error: message }, { status: 500 })
+    console.warn(`[upload] Blob put failed (${errorCode(err)}) — upload aborted`)
+    return NextResponse.json({ error: 'Upload failed' }, { status: 500 })
   }
 }

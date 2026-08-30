@@ -68,12 +68,10 @@
       setError('')
       setUploading(true)
       try {
-        const token = localStorage.getItem('admin_token')
         const formData = new FormData()
         formData.append('file', file)
         const res = await fetch('/api/upload', {
           method: 'POST',
-          headers: { Authorization: `Bearer ${token}` },
           body: formData,
         })
         if (!res.ok) {
@@ -338,7 +336,8 @@
   }
 
   export default function AdminPage() {
-    const [token, setToken] = useState<string | null>(null)
+    const [authed, setAuthed] = useState(false)
+    const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
     const [loginError, setLoginError] = useState('')
@@ -354,15 +353,15 @@
     }
 
     useEffect(() => {
-      const t = localStorage.getItem('admin_token')
-      if (t) {
-        setToken(t)
-        fetch('/api/auth', { headers: { Authorization: `Bearer ${t}` } })
-          .then(r => { if (r.status === 401) logout() })
-        const params = new URLSearchParams(window.location.search)
-        const tabParam = params.get('tab')
-        setTimeout(() => setTab(tabParam && SECTIONS.includes(tabParam as typeof SECTIONS[number]) ? tabParam : 'hero'), 0)
-      }
+      fetch('/api/auth')
+        .then(r => {
+          if (!r.ok) return
+          setAuthed(true)
+          const params = new URLSearchParams(window.location.search)
+          const tabParam = params.get('tab')
+          setTimeout(() => setTab(tabParam && SECTIONS.includes(tabParam as typeof SECTIONS[number]) ? tabParam : 'hero'), 0)
+        })
+        .catch(() => {})
     }, [])
 
     const setTab = (t: string) => {
@@ -379,11 +378,9 @@
       e.preventDefault()
       setLoginError('')
       try {
-        const res = await fetch('/api/auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password }) })
-        if (!res.ok) { setLoginError('Invalid password'); return }
-        const { token: t } = await res.json()
-        setToken(t)
-        localStorage.setItem('admin_token', t)
+        const res = await fetch('/api/auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }) })
+        if (!res.ok) { setLoginError('Invalid username or password'); return }
+        setAuthed(true)
         setTimeout(() => setTab('hero'), 0)
       } catch {
         setLoginError('Connection failed')
@@ -391,15 +388,15 @@
     }
 
     const logout = () => {
-      setToken(null)
-      localStorage.removeItem('admin_token')
+      setAuthed(false)
+      fetch('/api/auth', { method: 'DELETE' }).catch(() => {})
       showToast('Session expired, please login again', 'error')
     }
 
     const save = async (section: string) => {
       setSaving(section)
       try {
-        const res = await fetch(`/api/content/${section}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify(data[section]) })
+        const res = await fetch(`/api/content/${section}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data[section]) })
         if (!res.ok) {
           if (res.status === 401) { logout(); return }
           const err = await res.json()
@@ -411,7 +408,7 @@
       setSaving(null)
     }
 
-    if (!token) {
+    if (!authed) {
       return (
         <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background via-background to-muted/50 p-4">
           <form onSubmit={handleLogin} className="w-full max-w-sm rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-lg">
@@ -419,9 +416,10 @@
               <Lock className="h-5 w-5 text-primary" />
             </div>
             <h1 className="mb-1 text-center text-xl font-bold text-foreground">Admin Login</h1>
-            <p className="mb-6 text-center text-sm text-muted-foreground">Enter your password to continue</p>
+            <p className="mb-6 text-center text-sm text-muted-foreground">Enter your credentials to continue</p>
+            <input type="text" value={username} onChange={e => setUsername(e.target.value)} placeholder="Username" className="mb-3 w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 transition-colors focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring" autoFocus />
             <div className="relative">
-              <input type={showPassword ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" className="w-full rounded-xl border border-border bg-background px-4 py-3 pr-11 text-sm text-foreground placeholder:text-muted-foreground/50 transition-colors focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring" autoFocus />
+              <input type={showPassword ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" className="w-full rounded-xl border border-border bg-background px-4 py-3 pr-11 text-sm text-foreground placeholder:text-muted-foreground/50 transition-colors focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring" />
               <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors">
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
