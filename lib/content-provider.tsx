@@ -25,9 +25,10 @@ const shimmerStyle = {
   backgroundSize: '200% auto',
 } as const
 
-export function ContentProvider({ children }: { children: ReactNode }) {
-  const [data, setData] = useState<ContentData | null>(null)
-  const [loaded, setLoaded] = useState(false)
+export function ContentProvider({ children, initialData }: { children: ReactNode; initialData?: ContentData | null }) {
+  const hasInitial = Boolean(initialData && Object.keys(initialData).length > 0)
+  const [data, setData] = useState<ContentData | null>(hasInitial ? initialData : null)
+  const [loaded, setLoaded] = useState(hasInitial)
   const [split, setSplit] = useState(false)
   const [offline, setOffline] = useState(false)
 

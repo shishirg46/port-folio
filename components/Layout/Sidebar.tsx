@@ -64,20 +64,19 @@ const Sidebar = () => {
     return () => observer.disconnect()
   }, [isHome])
 
-  const scrollTo = (id: string) => {
-    setIsMenuOpen(false)
-    if (isHome) {
-      const el = document.getElementById(id)
-      if (el) el.scrollIntoView({ behavior: 'smooth' })
-    } else {
-      window.location.href = `/#${id}`
-    }
-  }
-
   const navLink = ({ id, label }: { id: string; label: string }) => (
-    <button
+    <a
       key={id}
-      onClick={() => scrollTo(id)}
+      href={isHome ? `#${id}` : `/#${id}`}
+      aria-current={isHome && activeSection === id ? 'true' : undefined}
+      onClick={(e) => {
+        setIsMenuOpen(false)
+        if (isHome) {
+          e.preventDefault()
+          const el = document.getElementById(id)
+          if (el) el.scrollIntoView({ behavior: 'smooth' })
+        }
+      }}
       className={`group flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm transition-colors ${
         activeSection === id
           ? 'bg-primary text-primary-foreground shadow-sm'
@@ -90,7 +89,7 @@ const Sidebar = () => {
         }`}
       />
       {label}
-    </button>
+    </a>
   )
 
   const socialLinks: { label: string; url: string }[] = []

@@ -62,6 +62,8 @@ const Projects = () => {
                       alt={`${project.title} screenshot`}
                       width={1365}
                       height={768}
+                      sizes="(min-width: 1024px) 50vw, 100vw"
+                      loading="lazy"
                       className={`aspect-video h-full w-full ${
                         project.image.endsWith('.svg') ? 'object-contain p-4 bg-white' : 'object-cover object-left-top'
                       }`}

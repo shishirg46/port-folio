@@ -14,7 +14,7 @@ interface ContactFormData {
 }
 
 const defaultData = {
-  email: 'shishirghimire46@gmail.com',
+  email: 'shishirghimire36@gmail.com',
   tagline: 'Open to internships, freelance work, and collaborations',
   description: "Have a project, internship opportunity, or collaboration in mind? Send a message and I'll reply as soon as I can.",
 }

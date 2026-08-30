@@ -36,8 +36,13 @@ const Hero = () => {
             </div>
           )}
           <h1 className="mt-6 max-w-3xl text-2xl sm:text-3xl font-bold tracking-tight text-balance text-foreground md:text-5xl">
-            {d.subheading}
+            {d.name}
           </h1>
+          {d.subheading && (
+            <p className="mt-4 max-w-3xl text-lg font-semibold leading-snug text-balance text-primary/90 sm:text-xl">
+              {d.subheading}
+            </p>
+          )}
           <p className="mt-6 max-w-prose text-lg leading-relaxed text-pretty text-muted-foreground">
             {(() => {
               const parts = d.description.split(d.name)
@@ -86,6 +91,7 @@ const Hero = () => {
               alt={d.name || 'Shishir Ghimire'}
               width={928}
               height={1238}
+              sizes="(min-width: 1024px) 40vw, 90vw"
               className="aspect-4/5 w-full object-cover"
               priority
             />
