@@ -1,7 +1,21 @@
 import { NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
+import { rateLimit } from '@/lib/rate-limit'
+
+const SEND_LIMIT = { name: 'send', limit: 5, windowMs: 10 * 60 * 1000 }
 
 export async function POST(req: Request) {
+  const rate = rateLimit(req, SEND_LIMIT)
+  if (!rate.allowed) {
+    return NextResponse.json(
+      { error: 'Too many messages. Please try again later.' },
+      {
+        status: 429,
+        headers: { 'Retry-After': String(rate.retryAfterSeconds) },
+      },
+    )
+  }
+
   const { name, email, message } = await req.json()
 
   if (!name || !email || !message) {

@@ -23,6 +23,7 @@ export default [
     rules: {
       "react/prop-types": "off",
       "no-undef": "off",
+      "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     },
   },

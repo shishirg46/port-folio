@@ -15,7 +15,9 @@ async function readRaw(section: SectionKey): Promise<unknown | null> {
       const res = await fetch(blob.url)
       if (res.ok) return await res.json()
     }
-  } catch {}
+  } catch {
+    // Blob unavailable; fall through to the local JSON cache
+  }
   try {
     const file = await fs.readFile(
       path.join(process.cwd(), 'content', `${section}.json`),

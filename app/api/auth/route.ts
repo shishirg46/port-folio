@@ -7,8 +7,11 @@ import {
   sessionCookieOptions,
   getAdminSession,
 } from '@/lib/auth'
+import { rateLimit } from '@/lib/rate-limit'
 
 const DUMMY_HASH = bcrypt.hashSync('invalid-credential-placeholder', 12)
+
+const LOGIN_LIMIT = { name: 'login', limit: 10, windowMs: 10 * 60 * 1000 }
 
 export async function GET() {
   if (!(await getAdminSession())) {
@@ -18,6 +21,17 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const rate = rateLimit(req, LOGIN_LIMIT)
+  if (!rate.allowed) {
+    return NextResponse.json(
+      { error: 'Too many login attempts. Please try again later.' },
+      {
+        status: 429,
+        headers: { 'Retry-After': String(rate.retryAfterSeconds) },
+      },
+    )
+  }
+
   let body: unknown
   try {
     body = await req.json()

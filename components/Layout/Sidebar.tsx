@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Download, Github, Linkedin, Menu, X } from 'lucide-react'
 import { useContent } from '@/lib/content'
@@ -101,11 +102,11 @@ const Sidebar = () => {
       <aside className="hidden md:flex fixed left-0 top-0 h-screen w-72 flex-col justify-between border-r border-border bg-background/85 p-8 backdrop-blur">
         <div>
           <div className="space-y-4">
-            <a href="/" className="block h-20 w-20">
+            <Link href="/" className="block h-20 w-20">
               <Image src="/web-title-icon.png" alt="Shishir Ghimire" width={96} height={96} className="h-full w-full object-contain" priority />
-            </a>
+            </Link>
             <div>
-              <a href="/" className="text-xl font-bold tracking-tight text-foreground">{h.name}</a>
+              <Link href="/" className="text-xl font-bold tracking-tight text-foreground">{h.name}</Link>
               <p className="mt-1 text-sm text-muted-foreground">{h.title}</p>
             </div>
           </div>
@@ -137,9 +138,9 @@ const Sidebar = () => {
 
       <header className="md:hidden fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-sm">
         <div className="flex items-center justify-between px-5 h-14">
-          <a href="/" className="block shrink-0">
+          <Link href="/" className="block shrink-0">
             <Image src="/web-title-icon.png" alt="Shishir Ghimire" width={36} height={36} className="object-contain" priority />
-          </a>
+          </Link>
           <button
             aria-label="Toggle navigation"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
