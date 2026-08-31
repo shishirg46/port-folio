@@ -1,17 +1,10 @@
   "use client"
 
   import { useState, useEffect, useRef, type FormEvent } from 'react'
+  import Link from 'next/link'
   import { Lock, Save, LogOut, Plus, X, Eye, EyeOff, CheckCircle2, Loader2, ExternalLink, Upload, ArrowLeft } from 'lucide-react'
 
   const SECTIONS = ['hero', 'about', 'skills', 'projects', 'contact'] as const
-
-  const sectionIcons: Record<string, string> = {
-    hero: 'Home',
-    about: 'User',
-    skills: 'Zap',
-    projects: 'FolderGit2',
-    contact: 'Mail',
-  }
 
   function Input({ label, value, onChange, type = 'text', placeholder }: { label: string; value: string; onChange: (v: string) => void; type?: string; placeholder?: string }) {
     return (
@@ -462,10 +455,10 @@
             ))}
           </nav>
           <div className="border-t border-border p-3 space-y-1">
-            <a href="/" className="flex w-full items-center gap-2.5 rounded-lg px-3.5 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+            <Link href="/" className="flex w-full items-center gap-2.5 rounded-lg px-3.5 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
               <ExternalLink className="h-4 w-4" />
               Back to Portfolio
-            </a>
+            </Link>
             <button onClick={logout} className="flex w-full items-center gap-2.5 rounded-lg px-3.5 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
               <LogOut className="h-4 w-4" />
               Logout
@@ -476,9 +469,9 @@
         <div className="flex-1 min-w-0 lg:ml-60">
           <header className="sticky top-0 z-30 flex items-center justify-between border-b border-border bg-background/95 px-4 sm:px-6 py-3 backdrop-blur">
             <div className="flex items-center gap-3 min-w-0">
-              <a href="/" className="lg:hidden flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors" title="Back to Portfolio">
+              <Link href="/" className="lg:hidden flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors" title="Back to Portfolio">
                 <ArrowLeft className="h-4 w-4" />
-              </a>
+              </Link>
               <h1 className="text-base font-bold text-foreground capitalize truncate">{tab}</h1>
               <span className="hidden text-xs text-muted-foreground sm:inline shrink-0">/ edit content</span>
             </div>
